@@ -45,6 +45,7 @@ const uploadFields = upload.fields([
 ]);
 
 // GET ALL CONTACTS (TURSO CLOUD SQLITE)
+// GET ALL CONTACTS
 app.get('/api/contacts', async (req, res) => {
   try {
     const result = await db.execute('SELECT * FROM contacts ORDER BY created_at DESC');
@@ -59,10 +60,14 @@ app.get('/api/contacts', async (req, res) => {
   }
 });
 
-// POST NEW CONTACT (TURSO CLOUD SQLITE)
+// POST NEW CONTACT
 app.post('/api/contacts', uploadFields, async (req, res) => {
   try {
-    const { startupName, people, instaHandle, addedByName, addedByAvatar } = req.body;
+    const { 
+      startupName, people, instaHandle, 
+      email, website, linkedin, address, 
+      addedByName, addedByAvatar 
+    } = req.body;
 
     let visitingCardUrl = null;
     if (req.files && req.files['visitingCard'] && req.files['visitingCard'][0]) {
@@ -79,14 +84,15 @@ app.post('/api/contacts', uploadFields, async (req, res) => {
 
     const query = `
       INSERT INTO contacts 
-      (startup_name, people, insta_handle, visiting_card_url, cabin_media_urls, added_by_name, added_by_avatar)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      (startup_name, people, insta_handle, email, website, linkedin, address, visiting_card_url, cabin_media_urls, added_by_name, added_by_avatar)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const result = await db.execute({
       sql: query,
       args: [
         startupName, people, instaHandle,
+        email || null, website || null, linkedin || null, address || null,
         visitingCardUrl, JSON.stringify(cabinMediaUrls), addedByName, addedByAvatar
       ]
     });
@@ -95,8 +101,4 @@ app.post('/api/contacts', uploadFields, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`⚡ Server running on port ${PORT}`);
 });
