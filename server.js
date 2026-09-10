@@ -1,4 +1,11 @@
 require('dotenv').config();
+// Catch and log uncaught errors before the app exits
+process.on('uncaughtException', (err) => {
+  console.error('💥 UNCAUGHT EXCEPTION:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('💥 UNHANDLED REJECTION at:', promise, 'reason:', reason);
+});
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
