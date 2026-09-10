@@ -1,11 +1,4 @@
 require('dotenv').config();
-// Catch and log uncaught errors before the app exits
-process.on('uncaughtException', (err) => {
-  console.error('💥 UNCAUGHT EXCEPTION:', err);
-});
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('💥 UNHANDLED REJECTION at:', promise, 'reason:', reason);
-});
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -13,6 +6,8 @@ const cors = require('cors');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const db = require('./db');
+
+console.log('⚡ Starting Express App setup...');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,17 +24,21 @@ cloudinary.config({
 });
 
 // 2. Configure Cloudinary Storage Engine
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: async (req, file) => {
-    const isVideo = file.mimetype.startsWith('video/');
-    return {
+let storage;
+try {
+  storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
       folder: 'startup_hub_uploads',
-      resource_type: isVideo ? 'video' : 'image',
-      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'mp4', 'mov', 'avi']
-    };
-  }
-});
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'mp4', 'mov', 'avi'],
+      resource_type: 'auto'
+    }
+  });
+  console.log('⚡ Cloudinary storage initialized.');
+} catch (err) {
+  console.error('⚠️ Cloudinary storage fallback activated:', err.message);
+  storage = multer.diskStorage({});
+}
 
 const upload = multer({
   storage: storage,
@@ -51,7 +50,6 @@ const uploadFields = upload.fields([
   { name: 'cabinMedia', maxCount: 10 }
 ]);
 
-// GET ALL CONTACTS (TURSO CLOUD SQLITE)
 // GET ALL CONTACTS
 app.get('/api/contacts', async (req, res) => {
   try {
@@ -108,4 +106,9 @@ app.post('/api/contacts', uploadFields, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// Bind explicitly to 0.0.0.0 for Render host compliance
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server is live and running on port ${PORT}`);
 });
