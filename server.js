@@ -1,46 +1,42 @@
-// server.js
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const db = require('./db');
 
 const app = express();
-const PORT = 3000;
-
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(uploadsDir));
 
-// DYNAMIC STORAGE: Creates a unique folder per contact submission
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (!req.contactFolder) {
-      const uniqueId = `contact_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
-      req.contactFolder = path.join(uploadsDir, uniqueId);
-      req.contactFolderRelative = `/uploads/${uniqueId}`;
-      if (!fs.existsSync(req.contactFolder)) {
-        fs.mkdirSync(req.contactFolder, { recursive: true });
-      }
-    }
-    cb(null, req.contactFolder);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
-    cb(null, `${file.fieldname}_${uniqueSuffix}${path.extname(file.originalname)}`);
+// 1. Configure Cloudinary Credentials
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// 2. Configure Cloudinary Storage Engine for Multer
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    const isVideo = file.mimetype.startsWith('video/');
+    return {
+      folder: 'startup_hub_uploads',
+      resource_type: isVideo ? 'video' : 'image',
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'mp4', 'mov', 'avi']
+    };
   }
 });
 
 const upload = multer({
-  storage,
-  limits: { fileSize: 50 * 1024 * 1024 } // 50MB max limit
+  storage: storage,
+  limits: { fileSize: 100 * 1024 * 1024 } // 100MB max limit for videos
 });
 
 const uploadFields = upload.fields([
@@ -48,6 +44,7 @@ const uploadFields = upload.fields([
   { name: 'cabinMedia', maxCount: 10 }
 ]);
 
+// GET ALL CONTACTS
 app.get('/api/contacts', (req, res) => {
   db.all('SELECT * FROM contacts ORDER BY created_at DESC', [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -60,22 +57,22 @@ app.get('/api/contacts', (req, res) => {
   });
 });
 
+// POST NEW CONTACT (Cloudinary Direct Stream)
 app.post('/api/contacts', uploadFields, (req, res) => {
   try {
     const { startupName, people, instaHandle, addedByName, addedByAvatar } = req.body;
 
-    const folderRel = req.contactFolderRelative || '';
-
+    // Cloudinary returns the hosted HTTPS URL in file.path
     let visitingCardUrl = null;
     if (req.files && req.files['visitingCard'] && req.files['visitingCard'][0]) {
-      visitingCardUrl = `${folderRel}/${req.files['visitingCard'][0].filename}`;
+      visitingCardUrl = req.files['visitingCard'][0].path;
     }
 
     let cabinMediaUrls = [];
     if (req.files && req.files['cabinMedia']) {
       cabinMediaUrls = req.files['cabinMedia'].map(file => ({
         type: file.mimetype,
-        url: `${folderRel}/${file.filename}`
+        url: file.path
       }));
     }
 
@@ -90,7 +87,7 @@ app.post('/api/contacts', uploadFields, (req, res) => {
       visitingCardUrl, JSON.stringify(cabinMediaUrls), addedByName, addedByAvatar
     ], function(err) {
       if (err) return res.status(500).json({ error: err.message });
-      res.json({ success: true, id: this.lastID, folder: folderRel });
+      res.json({ success: true, id: this.lastID });
     });
 
   } catch (error) {
@@ -99,5 +96,5 @@ app.post('/api/contacts', uploadFields, (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`⚡ Neo-Brutalist Hub running at http://localhost:${PORT}`);
+  console.log(`⚡ Server running at http://localhost:${PORT}`);
 });
