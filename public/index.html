@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HUB_CONNECT // Neo-Brutalist Directory</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Space Mono', monospace; }
+  </style>
+</head>
+<body class="bg-[#F4F3EF] text-black min-h-screen p-4 sm:p-8">
+
+  <!-- NAVBAR -->
+  <header class="max-w-6xl mx-auto bg-[#FFE600] border-4 border-black p-4 mb-8 shadow-[6px_6px_0px_0px_#000] flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center space-x-3">
+      <div class="bg-black text-white p-3 font-bold text-xl uppercase tracking-wider">[HUB]</div>
+      <div>
+        <h1 class="text-xl font-black uppercase tracking-tight">HUB_CONNECT</h1>
+        <p class="text-xs font-bold bg-white border-2 border-black px-2 py-0.5 inline-block">STARTUP_VISIT_INTEL</p>
+      </div>
+    </div>
+
+    <!-- CLICKABLE USER AVATAR & NAME BADGE -->
+    <div class="flex items-center space-x-4">
+      <div onclick="changeUserName()" class="flex items-center space-x-2 bg-white border-2 border-black px-3 py-1 shadow-[2px_2px_0px_0px_#000] cursor-pointer hover:bg-yellow-100 transition-colors" title="Click to edit your name">
+        <img id="userAvatar" src="" class="w-7 h-7 bg-black border border-black rounded-full">
+        <span id="userName" class="text-xs font-bold uppercase">SET_NAME</span>
+        <i class="fa-solid fa-pen text-[10px] text-gray-500 ml-1"></i>
+      </div>
+      <button type="button" onclick="toggleModal(true)" class="bg-[#FF90E8] hover:bg-[#ff70e2] text-black font-black uppercase text-sm border-3 border-black px-4 py-2 shadow-[4px_4px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center">
+        <i class="fa-solid fa-plus-square mr-2 text-base"></i> ADD CONTACT
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-6xl mx-auto">
+    <div class="flex items-center justify-between mb-6 bg-white border-3 border-black p-3 shadow-[4px_4px_0px_0px_#000]">
+      <h2 class="text-lg font-black uppercase">// COLLECTED_STARTUPS</h2>
+      <span id="contactCount" class="text-xs font-bold bg-[#00E5FF] border-2 border-black px-3 py-1">0 UNITS</span>
+    </div>
+
+    <div id="contactsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- ADD CONTACT MODAL -->
+  <div id="contactModal" class="fixed inset-0 bg-black/80 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#F4F3EF] border-4 border-black w-full max-w-lg shadow-[10px_10px_0px_0px_#000] flex flex-col max-h-[92vh]">
+      
+      <div class="bg-[#00E5FF] border-b-4 border-black p-4 flex justify-between items-center">
+        <h3 class="font-black text-lg uppercase flex items-center">
+          <i class="fa-solid fa-square-plus mr-2"></i> NEW_STARTUP_RECORD
+        </h3>
+        <button type="button" onclick="toggleModal(false)" class="bg-black text-white w-8 h-8 font-black hover:bg-red-500 border-2 border-black transition-colors">✕</button>
+      </div>
+
+      <form id="addContactForm" class="p-6 overflow-y-auto space-y-5">
+        <!-- 1. Cabin Media -->
+        <div class="bg-white border-3 border-black p-4 shadow-[4px_4px_0px_0px_#000]">
+          <label class="block text-xs font-black uppercase mb-2">// 1. CABIN_PHOTOS_VIDEOS</label>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="file" id="cabinInput" accept="image/*,video/*" multiple class="hidden" onchange="previewCabinFiles(event)">
+            <button type="button" onclick="document.getElementById('cabinInput').click()" class="bg-[#FFE600] border-2 border-black p-2 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_#000]">
+              <i class="fa-solid fa-folder-open mr-1"></i> SELECT_FILES
+            </button>
+            <button type="button" onclick="openCamera('cabin')" class="bg-[#A3E635] border-2 border-black p-2 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_#000]">
+              <i class="fa-solid fa-camera mr-1"></i> USE_CAMERA
+            </button>
+          </div>
+          <div id="cabinPreview" class="flex flex-wrap gap-2 mt-3"></div>
+        </div>
+
+        <!-- 2. Startup Name -->
+        <div class="bg-white border-3 border-black p-4 shadow-[4px_4px_0px_0px_#000]">
+          <label class="block text-xs font-black uppercase mb-1">// 2. STARTUP_NAME</label>
+          <input type="text" id="startupName" required placeholder="e.g. CYBER_DYNE_LABS" class="w-full bg-[#F4F3EF] border-2 border-black p-2 text-xs font-bold focus:bg-yellow-100 focus:outline-none">
+        </div>
+
+        <!-- 3. People / Roles -->
+        <div class="bg-white border-3 border-black p-4 shadow-[4px_4px_0px_0px_#000] space-y-3">
+          <div class="flex justify-between items-center">
+            <label class="block text-xs font-black uppercase">// 3. CONTACT_PERSONS</label>
+            <button type="button" onclick="addPersonRow()" class="bg-[#A3E635] border-2 border-black px-2 py-1 text-[10px] font-black uppercase shadow-[1px_1px_0px_0px_#000] hover:bg-lime-300">
+              + ADD ANOTHER ROLE/PERSON
+            </button>
+          </div>
+          <div id="peopleContainer" class="space-y-3"></div>
+        </div>
+
+        <!-- 4. Visiting Card -->
+        <div class="bg-white border-3 border-black p-4 shadow-[4px_4px_0px_0px_#000]">
+          <label class="block text-xs font-black uppercase mb-2">// 4. VISITING_CARD_PHOTO</label>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="file" id="visitingCardInput" accept="image/*" class="hidden" onchange="previewCardFile(event)">
+            <button type="button" onclick="document.getElementById('visitingCardInput').click()" class="bg-[#FFE600] border-2 border-black p-2 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_#000]">
+              <i class="fa-solid fa-image mr-1"></i> SELECT_CARD
+            </button>
+            <button type="button" onclick="openCamera('visitingCard')" class="bg-[#A3E635] border-2 border-black p-2 font-bold text-xs uppercase shadow-[2px_2px_0px_0px_#000]">
+              <i class="fa-solid fa-id-card mr-1"></i> SNAP_CARD
+            </button>
+          </div>
+          <div id="cardPreview" class="mt-3"></div>
+        </div>
+
+        <!-- 5. Instagram -->
+        <div class="bg-white border-3 border-black p-4 shadow-[4px_4px_0px_0px_#000]">
+          <label class="block text-xs font-black uppercase mb-1">// 5. INSTAGRAM_HANDLE</label>
+          <input type="text" id="instaHandle" placeholder="@startup_handle" required class="w-full bg-[#F4F3EF] border-2 border-black p-2 text-xs font-bold focus:outline-none">
+        </div>
+
+        <button type="submit" id="submitBtn" class="w-full bg-[#FF90E8] border-3 border-black font-black py-3 uppercase text-sm shadow-[4px_4px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+          SAVE_DATA_STREAM
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- WEBCAM MODAL -->
+  <div id="cameraModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#F4F3EF] border-4 border-black p-4 max-w-md w-full shadow-[8px_8px_0px_0px_#000]">
+      <h4 class="font-black text-sm uppercase mb-3">// LIVE_WEBCAM_CAPTURE</h4>
+      <video id="webcamVideo" autoplay playsinline class="w-full h-64 bg-black border-2 border-black object-cover mb-4"></video>
+      <canvas id="snapshotCanvas" class="hidden"></canvas>
+      <div class="flex gap-2">
+        <button type="button" onclick="captureWebcamFrame()" class="flex-1 bg-[#A3E635] border-2 border-black font-black p-3 text-xs uppercase shadow-[2px_2px_0px_0px_#000]">
+          CAPTURE_FRAME
+        </button>
+        <button type="button" onclick="closeCamera()" class="bg-black text-white font-bold px-4 py-2 text-xs uppercase">
+          CANCEL
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEDIA EXPLORE GALLERY MODAL -->
+  <div id="mediaExplorerModal" class="fixed inset-0 bg-black/85 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden" onclick="closeExplorerModal()">
+    <div class="bg-[#F4F3EF] border-4 border-black w-full max-w-3xl shadow-[10px_10px_0px_0px_#000] flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
+      <div class="bg-[#00E5FF] border-b-4 border-black p-4 flex justify-between items-center">
+        <h3 id="explorerTitle" class="font-black text-base uppercase flex items-center">
+          <i class="fa-solid fa-[#fa-images] mr-2"></i> CABIN_MEDIA_EXPLORER
+        </h3>
+        <button type="button" onclick="closeExplorerModal()" class="bg-black text-white w-8 h-8 font-black hover:bg-red-500 border-2 border-black transition-colors">✕</button>
+      </div>
+      <div id="explorerGrid" class="p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100 flex-1"></div>
+    </div>
+  </div>
+
+  <!-- MEDIA LIGHTBOX MODAL -->
+  <div id="mediaLightbox" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 hidden" onclick="closeLightbox()">
+    <div class="relative max-w-4xl w-full bg-[#F4F3EF] border-4 border-black p-3 shadow-[10px_10px_0px_0px_#000]" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center bg-[#FFE600] border-2 border-black p-2 mb-3">
+        <span class="font-black text-xs uppercase">// MEDIA_INSPECTOR</span>
+        <button type="button" onclick="closeLightbox()" class="bg-black text-white font-bold px-2.5 py-1 text-xs">✕ CLOSE</button>
+      </div>
+      <div id="lightboxContent" class="flex items-center justify-center max-h-[75vh] overflow-hidden bg-black border-2 border-black"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
