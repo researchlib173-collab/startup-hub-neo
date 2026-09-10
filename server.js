@@ -1,4 +1,50 @@
-// GET ALL CONTACTS
+require('dotenv').config();
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const cors = require('cors');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const db = require('./db');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 1. Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// 2. Configure Cloudinary Storage Engine
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    const isVideo = file.mimetype.startsWith('video/');
+    return {
+      folder: 'startup_hub_uploads',
+      resource_type: isVideo ? 'video' : 'image',
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'mp4', 'mov', 'avi']
+    };
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 100 * 1024 * 1024 }
+});
+
+const uploadFields = upload.fields([
+  { name: 'visitingCard', maxCount: 1 },
+  { name: 'cabinMedia', maxCount: 10 }
+]);
+
+// GET ALL CONTACTS (TURSO CLOUD SQLITE)
 app.get('/api/contacts', async (req, res) => {
   try {
     const result = await db.execute('SELECT * FROM contacts ORDER BY created_at DESC');
@@ -13,7 +59,7 @@ app.get('/api/contacts', async (req, res) => {
   }
 });
 
-// POST NEW CONTACT
+// POST NEW CONTACT (TURSO CLOUD SQLITE)
 app.post('/api/contacts', uploadFields, async (req, res) => {
   try {
     const { startupName, people, instaHandle, addedByName, addedByAvatar } = req.body;
@@ -49,4 +95,8 @@ app.post('/api/contacts', uploadFields, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`⚡ Server running on port ${PORT}`);
 });
