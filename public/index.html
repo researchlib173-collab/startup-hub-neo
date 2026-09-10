@@ -3,117 +3,144 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Startup Hub Directory</title>
+  <title>STARTUP HUB // DIRECTORY</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Tesseract.js ML OCR Engine -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
-<body class="bg-gray-100 min-h-screen text-gray-800">
-  <div class="max-w-5xl mx-auto p-4 sm:p-6">
+<body class="bg-[#f4f4f0] text-black min-h-screen font-mono antialiased p-4 sm:p-8">
+
+  <div class="max-w-5xl mx-auto space-y-8">
     
-    <!-- Header -->
-    <header class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-indigo-600">🚀 Startup Hub Directory</h1>
-      <p class="text-gray-600 mt-1">Discover, upload, and connect with innovative startups</p>
+    <!-- Neo-Brutalist Header -->
+    <header class="bg-yellow-300 border-4 border-black p-6 shadow-[6px_6px_0px_0px_#000] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-black uppercase tracking-tight flex items-center gap-3">
+          <span>🚀</span> STARTUP HUB
+        </h1>
+        <p class="text-xs font-bold uppercase tracking-wider text-black/80 mt-1">Directory & Media Vault // ML Powered</p>
+      </div>
+      <a href="#upload-card" class="bg-black hover:bg-neutral-800 text-white font-black text-xs uppercase tracking-widest px-4 py-3 border-2 border-black shadow-[3px_3px_0px_0px_#facc15] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all">
+        + ADD STARTUP
+      </a>
     </header>
 
-    <!-- Entry Upload Form -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-10">
-      <h2 class="text-xl font-semibold mb-4 text-gray-700">Add New Startup</h2>
-      <form id="contactForm" class="space-y-4">
+    <!-- Upload Form Container -->
+    <div id="upload-card" class="bg-white border-4 border-black p-6 sm:p-8 shadow-[8px_8px_0px_0px_#000]">
+      <div class="border-b-4 border-black pb-4 mb-6 flex justify-between items-center flex-wrap gap-2">
+        <h2 class="text-xl font-black uppercase tracking-tight bg-cyan-300 px-3 py-1 border-2 border-black shadow-[3px_3px_0px_0px_#000]">
+          Add New Entry
+        </h2>
+        <span class="bg-pink-300 border-2 border-black text-xs font-black uppercase px-2.5 py-1 shadow-[2px_2px_0px_0px_#000]">
+          ⚡ ML OCR Active
+        </span>
+      </div>
+
+      <form id="contactForm" class="space-y-6">
         
+        <!-- Startup & Founders -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Startup Name *</label>
-            <input type="text" id="startupName" name="startupName" required class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Acme Corp">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1">Startup Name *</label>
+            <input type="text" id="startupName" name="startupName" required class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-yellow-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="e.g. Acme Cybernetics">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Founders / Key People</label>
-            <input type="text" id="people" name="people" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Alice, Bob">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1">Founders / Key People</label>
+            <input type="text" id="people" name="people" class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-yellow-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="e.g. Jane Doe, Alex Smith">
           </div>
         </div>
 
+        <!-- Social & Email -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Instagram Handle</label>
-            <input type="text" id="instaHandle" name="instaHandle" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="@startup">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1"><i class="fa-brands fa-instagram text-pink-600 mr-1"></i> Instagram Handle</label>
+            <input type="text" id="instaHandle" name="instaHandle" class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-pink-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="@startup_hub">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-            <input type="email" id="email" name="email" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="contact@startup.com">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1"><i class="fa-solid fa-envelope text-blue-600 mr-1"></i> Email Address</label>
+            <input type="email" id="email" name="email" class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-cyan-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="contact@startup.com">
           </div>
         </div>
 
+        <!-- Web, LinkedIn, Address -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Website</label>
-            <input type="text" id="website" name="website" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="https://startup.com">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1"><i class="fa-solid fa-globe text-emerald-600 mr-1"></i> Website</label>
+            <input type="text" id="website" name="website" class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-lime-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="https://startup.com">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">LinkedIn Profile</label>
-            <input type="text" id="linkedin" name="linkedin" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="linkedin.com/in/username">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1"><i class="fa-brands fa-linkedin text-blue-700 mr-1"></i> LinkedIn Profile</label>
+            <input type="text" id="linkedin" name="linkedin" class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-blue-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="linkedin.com/in/user">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Office Address</label>
-            <input type="text" id="address" name="address" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="123 Innovation Way">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1"><i class="fa-solid fa-location-dot text-rose-600 mr-1"></i> Office Address</label>
+            <input type="text" id="address" name="address" class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-rose-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="123 Tech Park">
           </div>
         </div>
 
-        <!-- Upload Visiting Card & ML Autofill -->
-        <div class="border-t pt-4 mt-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Visiting Card Image</label>
-          <input type="file" id="visitingCardInput" name="visitingCard" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-          
-          <div class="mt-2">
-            <button type="button" id="autofill-btn" onclick="scanVisitingCard()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-md shadow text-sm transition">
-              ⚡ Automatically fill credentials from Card
+        <!-- Visiting Card Upload & ML Auto-Fill -->
+        <div class="bg-yellow-100 border-3 border-black p-4 shadow-[4px_4px_0px_0px_#000] space-y-3">
+          <label class="block text-xs font-black uppercase tracking-wider"><i class="fa-solid fa-id-card mr-1"></i> Visiting Card Image</label>
+          <input type="file" id="visitingCardInput" name="visitingCard" accept="image/*" capture="environment" class="w-full text-xs font-bold file:mr-4 file:py-2.5 file:px-4 file:border-2 file:border-black file:text-xs file:font-black file:bg-white hover:file:bg-yellow-300 file:shadow-[2px_2px_0px_0px_#000] file:cursor-pointer transition">
+          <div>
+            <button type="button" id="autofill-btn" onclick="scanVisitingCard()" class="hidden bg-lime-400 hover:bg-lime-500 text-black font-black text-xs uppercase tracking-wider px-4 py-2.5 border-2 border-black shadow-[3px_3px_0px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-2">
+              <i class="fa-solid fa-bolt"></i> Automatically fill credentials from Card
             </button>
-            <p id="ocr-status" class="text-xs text-gray-500 mt-1 hidden"></p>
+            <p id="ocr-status" class="text-xs font-bold text-black mt-2 hidden"></p>
           </div>
         </div>
 
-        <!-- Upload Cabin Media -->
+        <!-- Cabin Media -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Cabin Photos / Videos (Multiple)</label>
-          <input type="file" id="cabinMedia" name="cabinMedia" accept="image/*,video/*" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+          <label class="block text-xs font-black uppercase tracking-wider mb-1"><i class="fa-solid fa-photo-film mr-1"></i> Cabin Photos / Videos (Multiple)</label>
+          <input type="file" id="cabinMedia" name="cabinMedia" accept="image/*,video/*" capture="environment" multiple class="w-full text-xs font-bold file:mr-4 file:py-2.5 file:px-4 file:border-2 file:border-black file:text-xs file:font-black file:bg-white hover:file:bg-cyan-300 file:shadow-[2px_2px_0px_0px_#000] file:cursor-pointer transition">
         </div>
 
         <!-- Added By Info -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-3 border-black">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Added By (Your Name)</label>
-            <input type="text" id="addedByName" name="addedByName" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Your Name">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1">Added By (Your Name)</label>
+            <input type="text" id="addedByName" name="addedByName" class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-yellow-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="Your Name">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Avatar Handle / Initial</label>
-            <input type="text" id="addedByAvatar" name="addedByAvatar" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g. JD">
+            <label class="block text-xs font-black uppercase tracking-wider mb-1">Avatar Badge Initials</label>
+            <input type="text" id="addedByAvatar" name="addedByAvatar" class="w-full bg-[#fcfcf9] border-3 border-black p-3 text-sm font-bold placeholder-gray-400 focus:outline-none focus:bg-yellow-100 shadow-[3px_3px_0px_0px_#000] transition" placeholder="e.g. JD">
           </div>
         </div>
 
-        <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md shadow transition">
-          Submit Startup Entry
+        <button type="submit" id="submitBtn" class="w-full bg-lime-400 hover:bg-lime-500 text-black font-black uppercase tracking-widest py-4 border-4 border-black shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-up text-base"></i> SUBMIT STARTUP ENTRY
         </button>
       </form>
     </div>
 
-    <!-- Directory Contacts -->
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Directory Entries</h2>
+    <!-- Directory Listings Section -->
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-black uppercase tracking-tight bg-pink-300 border-3 border-black px-4 py-1 shadow-[4px_4px_0px_0px_#000]">
+        Directory Entries
+      </h2>
+      <button onclick="loadContacts()" class="bg-white border-2 border-black font-black text-xs uppercase px-3 py-1.5 shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-300 transition flex items-center gap-1.5">
+        <i class="fa-solid fa-rotate-right"></i> Refresh
+      </button>
+    </div>
+
     <div id="contactsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <p class="text-gray-500">Loading startups...</p>
+      <p class="font-bold text-gray-600">Loading startups...</p>
     </div>
 
   </div>
 
-  <!-- Logic Script -->
+  <!-- Script Logic -->
   <script>
-    // Reveal Autofill Button when card is selected
     document.getElementById('visitingCardInput').addEventListener('change', function() {
       if (this.files && this.files[0]) {
         document.getElementById('autofill-btn').classList.remove('hidden');
       }
     });
 
-    // Machine Learning Visiting Card OCR Scanner
     async function scanVisitingCard() {
       const fileInput = document.getElementById('visitingCardInput');
       const statusText = document.getElementById('ocr-status');
@@ -123,16 +150,15 @@
 
       btn.disabled = true;
       statusText.classList.remove('hidden');
-      statusText.innerText = "🤖 ML Model reading card text...";
+      statusText.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> ML Model reading card text...`;
 
       try {
         const { data: { text } } = await Tesseract.recognize(
           fileInput.files[0],
           'eng',
-          { logger: m => { if (m.status === 'recognizing text') statusText.innerText = `Scanning: ${Math.round(m.progress * 100)}%`; } }
+          { logger: m => { if (m.status === 'recognizing text') statusText.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Scanning: ${Math.round(m.progress * 100)}%`; } }
         );
 
-        // Regex Patterns for Contact Information
         const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/i);
         const webMatch = text.match(/(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.(com|io|co|in|org|net))/i);
         const linkedinMatch = text.match(/(linkedin\.com\/in\/[a-zA-Z0-9_-]+)/i);
@@ -141,21 +167,20 @@
         if (webMatch) document.getElementById('website').value = webMatch[0].startsWith('http') ? webMatch[0] : 'https://' + webMatch[0];
         if (linkedinMatch) document.getElementById('linkedin').value = 'https://' + linkedinMatch[0];
 
-        statusText.innerText = "✅ Credentials extracted and auto-filled!";
+        statusText.innerHTML = `<span class="bg-lime-300 border-2 border-black px-2 py-0.5"><i class="fa-solid fa-circle-check mr-1"></i> Credentials extracted!</span>`;
       } catch (err) {
-        statusText.innerText = "❌ Could not extract text from card image.";
+        statusText.innerHTML = `<span class="bg-rose-300 border-2 border-black px-2 py-0.5"><i class="fa-solid fa-circle-exclamation mr-1"></i> Could not read text.</span>`;
         console.error(err);
       } finally {
         btn.disabled = false;
       }
     }
 
-    // Form Submission
     document.getElementById('contactForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
-      submitBtn.innerText = "Uploading...";
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> UPLOADING...`;
 
       const formData = new FormData(this);
 
@@ -167,7 +192,6 @@
 
         const result = await response.json();
         if (result.success) {
-          alert('Startup added successfully!');
           this.reset();
           document.getElementById('autofill-btn').classList.add('hidden');
           document.getElementById('ocr-status').classList.add('hidden');
@@ -180,11 +204,10 @@
         console.error(err);
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = "Submit Startup Entry";
+        submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> SUBMIT STARTUP ENTRY`;
       }
     });
 
-    // Fetch & Render Contacts
     async function loadContacts() {
       const container = document.getElementById('contactsContainer');
       try {
@@ -192,7 +215,7 @@
         const contacts = await res.json();
 
         if (!contacts.length) {
-          container.innerHTML = '<p class="text-gray-500 col-span-2">No startups added yet.</p>';
+          container.innerHTML = '<p class="font-bold text-gray-500 col-span-2">No startups found.</p>';
           return;
         }
 
@@ -201,58 +224,57 @@
           const cabinMedia = Array.isArray(c.cabin_media_urls) ? c.cabin_media_urls : [];
 
           return `
-            <div class="bg-white p-5 rounded-lg shadow border border-gray-200">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h3 class="text-xl font-bold text-gray-900">${c.startup_name || 'Unnamed Startup'}</h3>
-                  ${peopleList ? `<p class="text-sm text-gray-600 mt-1"><strong>Founders:</strong> ${peopleList}</p>` : ''}
-                </div>
-                ${c.added_by_avatar ? `<span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded-full">${c.added_by_avatar}</span>` : ''}
-              </div>
-
-              <!-- Details Grid -->
-              <div class="mt-3 text-sm space-y-1 text-gray-600">
-                ${c.insta_handle ? `<p>📸 <strong>Insta:</strong> <a href="https://instagram.com/${c.insta_handle.replace('@','')}" target="_blank" class="text-indigo-600 hover:underline">${c.insta_handle}</a></p>` : ''}
-                ${c.email ? `<p>✉️ <strong>Email:</strong> <a href="mailto:${c.email}" class="text-indigo-600 hover:underline">${c.email}</a></p>` : ''}
-                ${c.website ? `<p>🌐 <strong>Website:</strong> <a href="${c.website}" target="_blank" class="text-indigo-600 hover:underline">${c.website}</a></p>` : ''}
-                ${c.linkedin ? `<p>💼 <strong>LinkedIn:</strong> <a href="${c.linkedin}" target="_blank" class="text-indigo-600 hover:underline">${c.linkedin}</a></p>` : ''}
-                ${c.address ? `<p>📍 <strong>Address:</strong> ${c.address}</p>` : ''}
-              </div>
-
-              <!-- Media Previews -->
-              ${c.visiting_card_url ? `
-                <div class="mt-4">
-                  <p class="text-xs font-semibold text-gray-500 mb-1">Visiting Card:</p>
-                  <a href="${c.visiting_card_url}" target="_blank">
-                    <img src="${c.visiting_card_url}" class="h-32 w-full object-cover rounded border hover:opacity-90 transition">
-                  </a>
-                </div>
-              ` : ''}
-
-              ${cabinMedia.length ? `
-                <div class="mt-4">
-                  <p class="text-xs font-semibold text-gray-500 mb-1">Cabin Media (${cabinMedia.length}):</p>
-                  <div class="flex gap-2 overflow-x-auto pb-2">
-                    ${cabinMedia.map(m => m.type && m.type.startsWith('video') ? 
-                      `<video src="${m.url}" controls class="h-20 w-20 object-cover rounded border"></video>` :
-                      `<a href="${m.url}" target="_blank"><img src="${m.url}" class="h-20 w-20 object-cover rounded border"></a>`
-                    ).join('')}
+            <div class="bg-white border-4 border-black p-6 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start gap-2 mb-3">
+                  <div>
+                    <h3 class="text-xl font-black uppercase tracking-tight text-black">${c.startup_name || 'Unnamed Startup'}</h3>
+                    ${peopleList ? `<p class="text-xs font-bold text-gray-700 mt-1"><i class="fa-solid fa-users mr-1"></i> ${peopleList}</p>` : ''}
                   </div>
+                  ${c.added_by_avatar ? `<span class="bg-cyan-300 border-2 border-black text-black font-black text-xs px-2.5 py-1 shadow-[2px_2px_0px_0px_#000]">${c.added_by_avatar}</span>` : ''}
                 </div>
-              ` : ''}
 
-              ${c.added_by_name ? `<p class="text-xs text-gray-400 mt-4 border-t pt-2">Added by ${c.added_by_name}</p>` : ''}
+                <div class="space-y-1.5 my-4 text-xs font-bold border-t-2 border-black pt-3">
+                  ${c.insta_handle ? `<p><i class="fa-brands fa-instagram text-pink-600 w-4"></i> <a href="https://instagram.com/${c.insta_handle.replace('@','')}" target="_blank" class="hover:underline">${c.insta_handle}</a></p>` : ''}
+                  ${c.email ? `<p><i class="fa-solid fa-envelope text-blue-600 w-4"></i> <a href="mailto:${c.email}" class="hover:underline">${c.email}</a></p>` : ''}
+                  ${c.website ? `<p><i class="fa-solid fa-globe text-emerald-600 w-4"></i> <a href="${c.website}" target="_blank" class="hover:underline">${c.website}</a></p>` : ''}
+                  ${c.linkedin ? `<p><i class="fa-brands fa-linkedin text-blue-700 w-4"></i> <a href="${c.linkedin}" target="_blank" class="hover:underline">${c.linkedin}</a></p>` : ''}
+                  ${c.address ? `<p><i class="fa-solid fa-location-dot text-rose-600 w-4"></i> ${c.address}</p>` : ''}
+                </div>
+
+                ${c.visiting_card_url ? `
+                  <div class="mt-4">
+                    <p class="text-[10px] font-black uppercase tracking-wider mb-1">Visiting Card</p>
+                    <a href="${c.visiting_card_url}" target="_blank">
+                      <img src="${c.visiting_card_url}" class="h-36 w-full object-cover border-2 border-black shadow-[3px_3px_0px_0px_#000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                    </a>
+                  </div>
+                ` : ''}
+
+                ${cabinMedia.length ? `
+                  <div class="mt-4">
+                    <p class="text-[10px] font-black uppercase tracking-wider mb-1">Cabin Media (${cabinMedia.length})</p>
+                    <div class="flex gap-2 overflow-x-auto pb-2">
+                      ${cabinMedia.map(m => m.type && m.type.startsWith('video') ? 
+                        `<video src="${m.url}" controls class="h-20 w-20 object-cover border-2 border-black shadow-[2px_2px_0px_0px_#000]"></video>` :
+                        `<a href="${m.url}" target="_blank"><img src="${m.url}" class="h-20 w-20 object-cover border-2 border-black shadow-[2px_2px_0px_0px_#000]"></a>`
+                      ).join('')}
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+
+              ${c.added_by_name ? `<p class="text-[11px] font-bold text-gray-500 mt-5 border-t-2 border-black pt-2">ADDED BY: ${c.added_by_name.toUpperCase()}</p>` : ''}
             </div>
           `;
         }).join('');
 
       } catch (err) {
-        container.innerHTML = '<p class="text-red-500 col-span-2">Failed to load directory entries.</p>';
+        container.innerHTML = '<p class="font-bold text-rose-600 col-span-2">Failed to load directory entries.</p>';
         console.error(err);
       }
     }
 
-    // Initial Load
     loadContacts();
   </script>
 </body>
