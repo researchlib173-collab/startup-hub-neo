@@ -1,17 +1,18 @@
-// db.js
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+require('dotenv').config();
+const { createClient } = require('@libsql/client');
 
-const dbPath = path.join(__dirname, 'hub.db');
-const db = new sqlite3.Database(dbPath);
+const db = createClient({
+  url: process.env.TURSO_DATABASE_URL || 'file:hub.db',
+  authToken: process.env.TURSO_AUTH_TOKEN
+});
 
-db.serialize(() => {
-  db.run(`
+async function initDB() {
+  await db.execute(`
     CREATE TABLE IF NOT EXISTS contacts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      startup_name TEXT NOT NULL,
-      people TEXT NOT NULL, -- JSON array of [{name, role, phone}]
-      insta_handle TEXT NOT NULL,
+      startup_name TEXT,
+      people TEXT,
+      insta_handle TEXT,
       visiting_card_url TEXT,
       cabin_media_urls TEXT,
       added_by_name TEXT,
@@ -19,6 +20,8 @@ db.serialize(() => {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
-});
+}
+
+initDB().catch(console.error);
 
 module.exports = db;
